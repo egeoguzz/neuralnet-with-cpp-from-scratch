@@ -18,7 +18,7 @@ public:
     Matrix add(const Matrix& B);
     Matrix multiply(const Matrix& B);
     Matrix transpose();
-    Matrix map();
+    Matrix map(double (*func)(double));
 };
 
 
