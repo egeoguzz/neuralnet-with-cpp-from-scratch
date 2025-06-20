@@ -1,0 +1,16 @@
+# CLion/JetBrains
+.idea/
+*.iml
+
+# Build
+cmake-build-debug/
+cmake-build-release/
+build/
+
+# MacOS
+.DS_Store
+
+# Binaries
+*.o
+*.out
+*.exe
