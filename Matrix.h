@@ -12,7 +12,15 @@ private:
     int rows, columns;
     std::vector<std::vector<double>> data;
 public:
-    Matrix(int rows, int columns);
+    int getRows() const { return rows; }
+    int getColumns() const { return columns; }
+    void setValueAt(int i, int j, double val) { data[i][j] = val; }
+    double getValueAt(int i, int j) const { return data[i][j]; }
+    Matrix(int rows, int columns) {
+        this->rows = rows;
+        this->columns = columns;
+        data = std::vector<std::vector<double>>(rows, std::vector<double>(columns));
+    };
     void fillRandom();
     void print();
     Matrix add(const Matrix& B);

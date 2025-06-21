@@ -1,17 +1,13 @@
 #include <vector>
-
-class Matrix {
-public:
-    int rows, columns;
-    std::vector<std::vector<double>> data;
-    Matrix(int rows, int columns) {
-        this->rows = rows;
-        this->columns = columns;
-        data = std::vector<std::vector<double>>(rows, std::vector<double>(columns, 0.0));
-    }
-};
+#include "Matrix.h"
+#include <iostream>
 
 int main() {
-    return 0;
     Matrix m = Matrix(3,3);
+    Matrix m2 = Matrix(3,3);
+    m2.setValueAt(0,0, 1);
+    m.setValueAt(0,0, 1);
+    Matrix c = m.add(m2);
+    std::cout << c.getValueAt(0,0);
+    return 0;
 }
