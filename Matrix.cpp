@@ -26,3 +26,14 @@ void Matrix::print() {
         std::cout << std::endl;
     }
 }
+
+Matrix Matrix::transpose() {
+    Matrix transposed = Matrix(this->getColumns(), this->getRows());
+    for (int i = 0; i < this->getRows(); i++) {
+        for (int j = 0; j < this->getColumns(); j++) {
+            transposed.setValueAt(j,i,this->getValueAt(i,j));
+        }
+    }
+    return transposed;
+}
+
