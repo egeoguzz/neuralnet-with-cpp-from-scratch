@@ -3,6 +3,8 @@
 //
 
 #include "Matrix.h"
+#include <iomanip>
+#include <iostream>
 
 Matrix Matrix::add(const Matrix &B) {
     Matrix C = Matrix(B.getRows(), B.getColumns());
@@ -14,4 +16,13 @@ Matrix Matrix::add(const Matrix &B) {
     }
 
     return C;
+}
+
+void Matrix::print() {
+    for (int i = 0; i < this->getRows(); i++) {
+        for (int j = 0; j < this->getColumns(); j++) {
+            std::cout << std::setw(6) << std::fixed << std::setprecision(2) << this->getValueAt(i,j) << " ";
+        }
+        std::cout << std::endl;
+    }
 }
