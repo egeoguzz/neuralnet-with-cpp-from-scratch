@@ -5,6 +5,7 @@
 #include "Matrix.h"
 #include <iomanip>
 #include <iostream>
+#include <random>
 
 Matrix Matrix::add(const Matrix &B) {
     Matrix C = Matrix(B.getRows(), B.getColumns());
@@ -36,4 +37,17 @@ Matrix Matrix::transpose() {
     }
     return transposed;
 }
+
+void Matrix::fillRandom() {
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<double> dist(1.0, 100.0);
+
+    for (int i = 0; i < this->getRows(); i++) {
+        for (int j = 0; j < this->getColumns(); j++) {
+            this->setValueAt(i,j,dist(mt));
+        }
+    }
+}
+
 
