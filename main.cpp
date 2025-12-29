@@ -1,18 +1,21 @@
-#include <vector>
-#include "Matrix.h"
 #include <iostream>
+#include <vector>
+#include "NeuralNetwork.h"
 
 int main() {
-    Matrix m = Matrix(3,3);
-    Matrix m2 = Matrix(3,3);
-    m2.setValueAt(0,0, 6);
-    m.setValueAt(0,0, 7);
-    m.setValueAt(2,0, 7);
-    Matrix c = m.add(m2);
-    c.fillRandom();
-    c.print();
-    std::cout << std::endl;
-    Matrix d = c.transpose();
-    d.print();
+    // Define a simple network: 2 Inputs -> 3 Hidden Neurons -> 1 Output Neuron
+    std::vector<int> topology = {2, 3, 1};
+    NeuralNetwork nn(topology);
+
+    // Dummy Input
+    std::vector<double> input = {1.0, 0.0};
+    
+    std::cout << "Feed Forward Test..." << std::endl;
+    std::vector<double> output = nn.feedForward(input);
+
+    std::cout << "Input: 1.0, 0.0" << std::endl;
+    // Should print a random value between 0 and 1
+    std::cout << "Output: " << output[0] << std::endl;
+
     return 0;
 }

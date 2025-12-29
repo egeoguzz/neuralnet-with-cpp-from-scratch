@@ -12,5 +12,13 @@ build/
 
 # Binaries
 *.o
+*.obj
 *.out
 *.exe
+
+# Executables
+neuralnet
+neuralnet.exe
+a.out
+
+
