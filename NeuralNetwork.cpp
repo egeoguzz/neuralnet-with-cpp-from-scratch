@@ -8,6 +8,13 @@ double sigmoid(double x) {
     return 1.0 / (1.0 + exp(-x));
 }
 
+// Derivative of Sigmoid Function
+// Essential for Backpropagation to calculate gradients.
+// If y = sigmoid(x), then f'(x) = y * (1 - y)
+double dSigmoid(double x) {
+    return x * (1 - x);
+}
+
 // Constructor: Initializes the network architecture
 NeuralNetwork::NeuralNetwork(std::vector<int> topology, double learningRate) {
     this->topology = topology;
@@ -48,8 +55,6 @@ std::vector<double> NeuralNetwork::feedForward(std::vector<double> inputVals) {
         // a) Linear Transformation: Z = Weights * Input + Bias
         values = weightMatrices[i].multiply(values);
         values = values.add(biasMatrices[i]);
-        
-        // b) Activation: A = Sigmoid(Z)
         values = values.map(sigmoid);
     }
 
@@ -61,7 +66,62 @@ std::vector<double> NeuralNetwork::feedForward(std::vector<double> inputVals) {
     return outputVals;
 }
 
-// Training function (Placeholder for Step 3)
+// Backpropagation Algorithm (Training)
+// 1. Performs a forward pass to store layer activations.
+// 2. Calculates error (Target - Output).
+// 3. Propagates error backwards to update weights and biases using Gradient Descent.
 void NeuralNetwork::train(std::vector<double> inputVals, std::vector<double> targetVals) {
-    std::cout << "Training function is not implemented yet." << std::endl;
+    
+    // PHASE 1: FORWARD PASS (With State Storage)
+    // We need to store the output of each layer to calculate gradients later.
+    
+    Matrix input(inputVals.size(), 1);
+    for(size_t i=0; i<inputVals.size(); i++) input.setValueAt(i, 0, inputVals[i]);
+
+    Matrix target(targetVals.size(), 1);
+    for(size_t i=0; i<targetVals.size(); i++) target.setValueAt(i, 0, targetVals[i]);
+
+    std::vector<Matrix> layers;
+    layers.push_back(input);
+
+    Matrix values = input;
+    for (size_t i = 0; i < weightMatrices.size(); i++) {
+        values = weightMatrices[i].multiply(values);
+        values = values.add(biasMatrices[i]);
+        values = values.map(sigmoid);
+        layers.push_back(values);
+    }
+
+    Matrix output = layers.back();
+
+    // PHASE 2: BACKWARD PASS (Error Propagation & Weight Update)
+    
+    // Calculate Output Error: Error = Target - Output
+    Matrix error = target.subtract(output);
+
+    // Loop backwards from the last layer to the first
+    for (int i = weightMatrices.size() - 1; i >= 0; i--) {
+        
+        // 1. Calculate Gradients
+        // Gradient = LearningRate * Error * dSigmoid(Output)
+        Matrix gradients = layers[i + 1].map(dSigmoid);
+        gradients = gradients.hadamard(error);
+        gradients = gradients.multiply(learningRate);
+
+        // 2. Calculate Deltas
+        // Delta = Gradient * Transpose(Previous Layer Output)
+        Matrix prevLayerTransposed = layers[i].transpose();
+        Matrix deltas = gradients.multiply(prevLayerTransposed);
+
+        // 3. Update Weights and Biases
+        weightMatrices[i] = weightMatrices[i].add(deltas);
+        biasMatrices[i]   = biasMatrices[i].add(gradients);
+
+        // 4. Propagate Error to Previous Layer
+        // Next Error = Transpose(Weights) * Current Error
+        if (i > 0) {
+            Matrix weightsTransposed = weightMatrices[i].transpose();
+            error = weightsTransposed.multiply(error);
+        }
+    }
 }
